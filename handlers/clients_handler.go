@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"billing/backend/services"
+	"billing/backend/services/network"
 	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
@@ -13,10 +14,10 @@ type Handler interface {
 
 type ClientsHandler struct {
 	clientsService services.ClientsServiceInterface
-	networkService services.NetworkServiceInterface
+	networkService network.NetworkServiceInterface
 }
 
-func NewClientsHandler(clientsService services.ClientsServiceInterface, networkService services.NetworkServiceInterface) Handler {
+func NewClientsHandler(clientsService services.ClientsServiceInterface, networkService network.NetworkServiceInterface) Handler {
 	return &ClientsHandler{clientsService: clientsService, networkService: networkService}
 }
 func (c *ClientsHandler) RegisterRoutes(app *fiber.App) {

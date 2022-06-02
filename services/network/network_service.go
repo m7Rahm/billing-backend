@@ -41,7 +41,6 @@ func (ns *NetworkService) AddNewSwitch(switchData *models.Switch) error {
 	return err
 }
 func (ns *NetworkService) SetPortStatus(switchId string, portId string, state string) error {
-	// switches, err := ns.netRepo.GetSwitchesDetailed()
 	if switchId == "" {
 		return fmt.Errorf("switch id is empty")
 	}
@@ -139,8 +138,7 @@ func (ns *NetworkService) GetVendors() ([]models.Vendor, error) {
 	return vendors, nil
 }
 func (ns *NetworkService) GetSwitches(query map[string]interface{}) ([]map[string]interface{}, error) {
-	switches := ns.netRepo.GetSwitches(query)
-	return switches, nil
+	return ns.netRepo.GetSwitches(query)
 }
 func (ns *NetworkService) GetSwitchList(name string, vendor string, mac string, ip string) ([]map[string]interface{}, error) {
 	switches, err := ns.netRepo.GetSwitchList(name, vendor, mac, ip)
@@ -280,6 +278,5 @@ func (ns *NetworkService) GetSwitchInfo(ctx context.Context, switchId string) (*
 	}, nil
 }
 func (c *NetworkService) GetSwitchesDetailed() ([]models.Switch, error) {
-	// switches, err := c.netRepo.GetSwitchesDetailed()
 	return []models.Switch{}, nil
 }

@@ -10,7 +10,7 @@ import (
 )
 
 type NetRepoInterface interface {
-	GetSwitches(map[string]interface{}) []map[string]interface{}
+	GetSwitches(map[string]interface{}) ([]map[string]interface{}, error)
 	GetSwitch(int) (models.Switch, error)
 	GetSwitchDetails(switchId string) (*map[string]interface{}, error)
 	GetSSHConfig(context.Context, int) (map[string]interface{}, error)
@@ -23,10 +23,10 @@ type NetRepo struct {
 	db *gorm.DB
 }
 
-func (nr *NetRepo) GetSwitches(query map[string]interface{}) []map[string]interface{} {
+func (nr *NetRepo) GetSwitches(query map[string]interface{}) ([]map[string]interface{}, error) {
 	var switches []map[string]interface{}
-	nr.db.Table("switches").Select("id, mac, ip, port_count").Where(query).Find(&switches)
-	return switches
+	err := nr.db.Table("switches").Select("id, mac, ip, port_count").Where(query).Find(&switches).Error
+	return switches, err
 }
 func (nr *NetRepo) AddNewSwitch(switchInfo *models.Switch) error {
 	return nr.db.Create(switchInfo).Error

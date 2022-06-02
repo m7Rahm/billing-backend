@@ -24,7 +24,6 @@ func main() {
 		handlers.NewClientsHandler(clientsService, networkService),
 		handlers.NewNetworkHandler(networkService),
 	}
-	// show lldp info remote-device
 	app := fiber.New()
 	server.RegisterRoutes(app, handlers)
 	app.Listen(":4000")

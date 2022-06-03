@@ -12,6 +12,7 @@ type ClientsRepoInterface interface {
 	GetClients() []models.Client
 	GetAddressTypes() []models.AddressType
 	GetAddresses() []models.Address
+	AddNewClient(client *models.Client) (uint, error)
 }
 
 type ClientRepo struct {
@@ -21,6 +22,10 @@ type ClientRepo struct {
 func NewClientRepo(db *gorm.DB) ClientsRepoInterface {
 	return &ClientRepo{db: db}
 }
+func (c *ClientRepo) AddNewClient(client *models.Client) (uint, error) {
+	tx := c.db.Create(client)
+	return client.ID, tx.Error
+}
 func (c *ClientRepo) GetAddresses() []models.Address {
 	var addresses []models.Address
 	c.db.Find(&addresses)
@@ -29,7 +34,7 @@ func (c *ClientRepo) GetAddresses() []models.Address {
 
 func (c *ClientRepo) GetAddressTypes() []models.AddressType {
 	var addressTypes []models.AddressType
-	c.db.Find(&addressTypes)
+	c.db.Find(&addressTypes, []int{1, 4, 5})
 	return addressTypes
 }
 func (c *ClientRepo) GetClient(val int) (*models.Client, error) {

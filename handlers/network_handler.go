@@ -100,10 +100,22 @@ func (nh *NetworkHandler) GetSwitches(c *fiber.Ctx) error {
 		})
 	} else {
 		var query map[string]interface{} = make(map[string]interface{}, 0)
-		query["city_id"] = c.Query("city")
-		query["street_id"] = c.Query("street")
-		query["district_id"] = c.Query("district")
-		query["building_id"] = c.Query("building")
+		city := c.Query("city")
+		street := c.Query("street")
+		district := c.Query("district")
+		building := c.Query("building")
+		if city != "" {
+			query["city_id"] = city
+		}
+		if street != "" {
+			query["street_id"] = street
+		}
+		if district != "" {
+			query["district_id"] = district
+		}
+		if building != "" {
+			query["building_id"] = building
+		}
 		switches, err := nh.networkService.GetSwitches(query)
 		if err != nil {
 			return c.Status(500).JSON(err)

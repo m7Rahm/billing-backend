@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"billing/backend/models"
 	"billing/backend/services"
 	"billing/backend/services/network"
 	"encoding/json"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -25,9 +27,25 @@ func (c *ClientsHandler) RegisterRoutes(app *fiber.App) {
 	app.Get("/addresses", c.GetAddresses)
 	app.Get("/address-types", c.GetAddressTypes)
 	app.Get("/switches", c.GetSwitches)
+	app.Post("/client", c.AddNewClient)
 }
 func (ch *ClientsHandler) GetAddresses(c *fiber.Ctx) error {
 	return c.JSON(ch.clientsService.GetAddresses())
+}
+func (ch *ClientsHandler) AddNewClient(c *fiber.Ctx) error {
+	var client models.Client
+	err := c.BodyParser(&client)
+	if err != nil {
+		fmt.Println(err)
+		return c.Status(500).SendString("Error parsing body")
+	}
+	clientId, err := ch.clientsService.AddNewClient(&client)
+	if err != nil {
+		return c.Status(500).JSON(err)
+	}
+	return c.Status(202).JSON(map[string]uint{
+		"client_id": clientId,
+	})
 }
 func (ch *ClientsHandler) GetAddressTypes(c *fiber.Ctx) error {
 	return c.JSON(ch.clientsService.GetAddressTypes())

@@ -25,7 +25,7 @@ type NetRepo struct {
 
 func (nr *NetRepo) GetSwitches(query map[string]interface{}) ([]map[string]interface{}, error) {
 	var switches []map[string]interface{}
-	err := nr.db.Table("switches").Select("id, mac, ip, port_count").Where(query).Find(&switches).Error
+	err := nr.db.Table("switches").Select("id, mac, ip, name, port_count, city_id, building_id, street_id").Where(query).Find(&switches).Error
 	return switches, err
 }
 func (nr *NetRepo) AddNewSwitch(switchInfo *models.Switch) error {
